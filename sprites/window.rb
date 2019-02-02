@@ -19,25 +19,31 @@ class Game_window
       when 'title'
         UI.background('home')
         Texts.text(@str, 3)
-        @scene = 'home' if Input.mousePush?(M_LBUTTON)
+
+        if Input.mousePush?(M_LBUTTON)
+          @str = []
+          @scene = 'home'
+        end
       when 'home'
         UI.background('home')
-        @str = []
         Texts.text(@str, 3)
         Home.run
 
         if Home.select == 'explore'
           Battle.start
-          @scene = 'battle'
+          @str = []
+          @scene = 'stage_slect'
         end
 
       when 'stage_slect'
+        Stage.run
+        Texts.text(@str, 3)
 
       when 'battle'
         UI.background('forest')
         @str = Battle.run('式展開とかでどこのステージか入れる今はforest')
         Texts.text(@str, 3)
-        @scene = 'title' if Battle.end == 'lose'
+        @scene = 'home' if Battle.end == 'lose'
       end
     end
   end
