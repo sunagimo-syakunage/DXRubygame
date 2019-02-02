@@ -18,6 +18,7 @@
 # include Skill
 
 # skill_damege("nomal","ice")
+hogehoge
 
 class Game_data
   def initialize
