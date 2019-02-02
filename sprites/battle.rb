@@ -83,8 +83,6 @@ class Battle
             # ボタンを消す
             @@battle_menu_flg = 0
             # プレイヤーの選択に応じたメソッドを呼び出す
-            # 個々のセルフ呼び出しているのは逃げるのに使ってるからだけど
-            # あまりよくない
             @@str = [@@player.send(@@select, @@enemy)]
             # 逃げれたなら戦闘終了
             break if @@escape_flg == 1

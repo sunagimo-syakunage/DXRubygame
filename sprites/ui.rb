@@ -1,14 +1,14 @@
 class UI < Sprite
   def initialize
-    data = Game_data.book
-    @@win_w = data[:win_w]
-    @@win_h = data[:win_h]
+    @@data = Game_data.book
+    @@win_w = @@data[:win_w]
+    @@win_h = @@data[:win_h]
     #==================カーソル系==================
     # カーソルはdrawしないからイメージを作りたくないけど仕方ない
     # 初期位置は画面外に宣言している
     @@cursor = Sprite.new(-10, -10, Image.new(10, 10, [0, 0, 0]))
     # ==================プレイヤー系==================
-    @@player = data[:player]
+    @@player = @@data[:player]
     @@player_img = Image.load('./media/character/hero.png')
     # ==================エネミ－系==================
     # 追加したらちゃんとenemy_imgsに追加しよう
@@ -21,11 +21,12 @@ class UI < Sprite
                     { name: '熊', img: @@boss_bear_img }]
 
     # ==================ステージ系==================
-    @@background_forest = Image.load('./media/background/forest.png')
     @@background_home = Image.load('./media/background/home.png')
-    @@background_imgs = [{ name: 'forest', img: @@background_forest },
-                         { name: 'home', img: @@background_home }]
-    @@stages = %w[forest forest]
+    @@background_forest = Image.load('./media/background/forest.png')
+    @@background_marine = Image.load('./media/background/marine.png')
+    @@background_imgs = [{ name: 'home', img: @@background_home },
+                         { name: 'forest', img: @@background_forest },
+                         { name: 'marine', img: @@background_marine }]
     # ==================テキスト系==================
     @@font_size = 32
     # テキストを置く場所作り
@@ -44,9 +45,9 @@ class UI < Sprite
 
     # ==================ボタン系==================
     # イメージの大きさをhome基準にするてもある
-    # @@img_width = @@home_img.width
-    @@img_width = 64
-    @@img_height = 64
+    @@cancel_img = Image.load('./media/button/cancel.png')
+    @@img_width = @@cancel_img.width
+    @@img_height = @@cancel_img.height
     @@img_margin = @@img_width
 
     # マウスオーバー時に出る画像
@@ -55,6 +56,7 @@ class UI < Sprite
     # テキストフィールドの半分に来るようにする
     # この数値は画像の左上が来る位置を刺してることに注意
     @@buttons_y = @@text_field_y + @@text_field_height / 2 - @@img_width / 2
+    @@cancel_button = [Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@cancel_img), Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@cancel_img.flush([50, 50, 50]))]
 
     # ==================バー系==================
     # 1メモリの大きさ
@@ -179,19 +181,7 @@ class Home_UI < UI
   end
 
   def self.home_view
-    case @@cursor
-    when @@attak_button[0]
-      'attak'
-    when @@defence_button[0]
-      'defence'
-    when @@skill_button[0]
-      # スキルボタン押します
-      @@skill_flg = 1
-    when @@escape_button[0]
-      'escape'
-    else
-      false
-    end
+
   end
 end
 
@@ -216,7 +206,6 @@ class Battle_UI < UI
     @@skill_img = Image.load('./media/button/skill.png')
     @@fire_img = Image.load('./media/button/fire.png')
     @@ice_img = Image.load('./media/button/ice.png')
-    @@cancel_img = Image.load('./media/button/cancel.png')
     @@escape_img = Image.load('./media/button/escape.png')
 
     # ボタン置き場
@@ -226,7 +215,6 @@ class Battle_UI < UI
     @@skill_button = [Sprite.new(@@img_margin * 3 + @@img_width * 2, @@buttons_y, @@skill_img), Sprite.new(@@img_margin * 3 + @@img_width * 2, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
     @@fire_button = Sprite.new(@@img_margin, @@buttons_y, @@fire_img)
     @@ice_button = Sprite.new(@@img_margin * 2 + @@img_width, @@buttons_y, @@ice_img)
-    @@cancel_button = [Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@cancel_img), Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@cancel_img.flush([50, 50, 50]))]
     @@escape_button = [Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@escape_img), Sprite.new(@@win_w - @@img_margin - @@img_width, @@buttons_y, @@escape_img.flush([50, 50, 50]))]
     # ボタンのスプライトを配列にまとめとく
     # ボタンを追加したらここに入れないと表示されないよ
@@ -336,5 +324,70 @@ class Battle_UI < UI
     # puts @@enemy_imgs.select { |abc| abc[:name] == enemy.name }.first
     # puts @@enemy_imgs.first[:name]
     # hash.select{|k, b| k.match(/^name$/)}
+  end
+end
+
+class Stage_UI < UI
+  def initialize
+    @@GO_img = Image.load('./media/button/GO.png')
+    @@left_arrow = Image.load('./media/button/left_arrow.png')
+    @@right_arrow = Image.load('./media/button/right_arrow.png')
+    @@white_circle = Image.load('./media/button/circle.png')
+    @@black_circle = Image.load('./media/button/circle.png').flush([50, 50, 50])
+    @@GO_button = [Sprite.new(@@img_margin, @@buttons_y, @@GO_img), Sprite.new(@@img_margin, @@buttons_y, @@GO_img.flush([50, 50, 50]))]
+    @@left_arrow_button = [Sprite.new(@@img_width/2, (@@win_h- @@img_height)/2 ,@@left_arrow), Sprite.new(@@img_width/2, (@@win_h- @@img_height)/2,@@left_arrow.flush([50, 50, 50]))]
+    @@right_arrow_button = [Sprite.new(@@win_w-@@img_width*1.5, (@@win_h- @@img_height)/2,@@right_arrow), Sprite.new(@@win_w-@@img_width*1.5, (@@win_h- @@img_height)/2,@@right_arrow.flush([50, 50, 50]))]
+    @@arrow_buttons = [@@left_arrow_button,@@right_arrow_button]
+    @@stage_buttons = [@@GO_button]
+    @@stage_buttons.each { |bb| bb[0].z = 100 }
+    @@arrow_buttons.each { |bb| bb[0].z = 100 }
+    @@stage_list = @@data[:stagelist]
+    @@i = 0
+  end
+
+  def self.stage_menu
+    Sprite.draw(@@stage_buttons)
+    if i = @@cursor.check(@@stage_buttons)[1]
+      i.z = 101
+      Window.draw(i.x - @@img_width / 4, i.y - @@img_width / 4, @@hover, 1)
+      # 一回描写
+      Sprite.draw(i)
+      i.z = 0
+    end
+  end
+
+  def self.stage_arrow
+    if @@i>=1
+    Sprite.draw(@@left_arrow_button[0])
+    Window.draw(@@img_width/3,(@@win_h- @@img_height*1.5)/2,@@black_circle,20)
+    if i = @@cursor.check(@@left_arrow_button)[1]
+      i.z = 101
+      Window.draw(@@img_width/3,(@@win_h- @@img_height*1.5)/2,@@white_circle,30)
+      # 一回描写
+      Sprite.draw(i)
+      i.z = 0
+    end
+    end
+    if @@i<@@stage_list.size-1
+    Sprite.draw(@@right_arrow_button[0])
+    Window.draw(@@win_w-@@img_width*1.80,(@@win_h- @@img_height*1.5)/2,@@black_circle,20)
+    if i = @@cursor.check(@@right_arrow_button)[1]
+      i.z = 101
+      Window.draw(@@win_w-@@img_width*1.80,(@@win_h- @@img_height*1.5)/2,@@white_circle,30)
+      # 一回描写
+      Sprite.draw(i)
+      i.z = 0
+    end
+  end
+  end
+
+  def self.view
+    @@cursor.x = Input.mouse_pos_x
+    @@cursor.y = Input.mouse_pos_y
+    stage_arrow
+    stage_menu
+    background(@@stage_list[@@i])
+    @@i += 1 if @@i<@@stage_list.size-1 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@right_arrow_button)
+    @@i -= 1 if @@i>=1 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@left_arrow_button)
   end
 end

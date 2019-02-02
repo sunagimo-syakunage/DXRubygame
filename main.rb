@@ -9,12 +9,14 @@ require_relative './sprites/timer.rb'
 require_relative './sprites/texts.rb'
 require_relative './sprites/ui.rb'
 require_relative './sprites/player.rb'
+require_relative './sprites/stage.rb'
 
 # 作りかけ
 Game_data.new
 UI.new
 Battle_UI.new
 Home_UI.new
+Stage_UI.new
 Home.new
 Battle.new
 Texts.new
