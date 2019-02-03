@@ -1,47 +1,27 @@
 class Battle
   def initialize
-    data = Game_data.book
+    @@data = Game_data.book
     @@flg = 0
     # 戻り値用に配列の宣言
     @@str = []
-    @@enemy_list = data[:enemy_list]
-    @@player = data[:player]
+    @@enemy = @@data[:spi_fire]
+    @@player = @@data[:player]
     @@flg = 0
     @@battle_menu_flg = 0
     @@escape_flg = 0
     @@result_flg = 0
 
-    @@stage = 'folest'
-
     # 今回はファイバーというのを利用しているので
     # そのファイバーを一回は宣言しないといけない
     # でもイニシャライズにめちゃくちゃ書くのは嫌だったので
     # メソッドに初期化を分けた
-    encount
-    fight
-    result
+    battle_fiber
 
     @@encount_f.resume(true)
     # self.result
   end
 
-  def encount
-    # enemy_listからenemyを一体ランダムに選ぶ
-    @@enemy = @@enemy_list.sample
-    # 戦闘が終わったとき用に初期体力の保存
-    @@enemy_oldhp = @@enemy.max_hp
-    # 負けた時用に体力の保存
-    @@player_oldhp = @@player.max_hp
-
-    # 生きてます
-    @@player.alive_flg = true
-    @@enemy.alive_flg = true
-
-    # プレイヤーの選択用
-    @@select = false
-
-    # ここからファイバーの宣言
-    # 今はエンカウントで止まることがないからファイバーはいらないかもね
+  def battle_fiber
     @@encount_f = Fiber.new do
       # 戦闘が始まって一番初めのテキストを配列に追加
       @@str = ["#{@@enemy.name}が現れた"]
@@ -53,14 +33,8 @@ class Battle
 
       @@fight_f.resume(true) while Fiber.yield
     end
-
-    # ここの@@strにjoinをつけるとすべての文章が結合するので注意
-    # return @@str
-  end
-
-  def fight
-    scene = 'player'
     @@fight_f = Fiber.new do
+      scene = 'player'
       # puts("e")
       # どちらかの体力が0以下になるまで戦う
       while @@flg == 0
@@ -117,11 +91,9 @@ class Battle
         end
       end
       # 戦闘が終わったのでリザルトを呼びます
+      @@result_f.resume(true)
       @@result_f.resume(true) while Fiber.yield
     end
-  end
-
-  def result
     @@result_f = Fiber.new do
       if @@flg == 1
         # 1は勝利なので勝利
@@ -134,11 +106,13 @@ class Battle
                 else
                   ["戦闘に勝利した\n"]
                 end
+        Fiber.yield
         @@result_flg = 'win'
       elsif @@flg == 2
         @@str = ["戦闘に敗北した\n"]
         # 負けたのでプレイヤーを回復させとく
         @@player.hp = @@player_oldhp
+        Fiber.yield
         @@result_flg = 'lose'
       else
         # 勝ったか負けた以外なら逃げている具体的にはflg==0
@@ -150,17 +124,37 @@ class Battle
       @@flg = 0
       # @@result_flg = 1
       # 戦闘の初期化
-      encount
-      fight
-      result
+      battle_fiber
     end
+  end
+
+  def self.encount
+    # enemy_listからenemyを一体ランダムに選ぶ
+    @@enemy_list = @@data["#{@stage}_enemy_list".to_sym]
+    @@enemy = @@enemy_list.sample
+    # 戦闘が終わったとき用に初期体力の保存
+    @@enemy_oldhp = @@enemy.max_hp
+    # 負けた時用に体力の保存
+    @@player_oldhp = @@player.max_hp
+
+    # 生きてます
+    # エンカウントした時のよみがえらせてるから倒した後戻してない
+    @@player.alive_flg = true
+    @@enemy.alive_flg = true
+
+    # プレイヤーの選択用
+    @@select = false
   end
 
   def self.escape
     @@escape_flg = 1
   end
 
-  def self.start
+  def self.start(stage)
+    puts @stage
+    @stage = stage
+    encount
+    puts @stage
     @@str = []
     @@result_flg = 'run'
   end
@@ -169,16 +163,15 @@ class Battle
     @@result_flg
   end
 
-  def self.run(stage)
-    @@stage = stage
+  def self.run
     # resume(true)にしているのは
     # while Fiber.yield()をうまく回すためwhileの判定のために
     # resumeに入れたものがyieldにはいってyieldにいれたものがresumeに入る
     # ファイバー分けて宣言て使いたいときに
     # if文に&&result_flg=="run"とか適当に書けば終わった後進まない
-    @@encount_f.resume(true) if Input.mousePush?(M_LBUTTON)
     Battle_UI.battle_view(@@enemy)
     Battle_UI.battle_menu if @@battle_menu_flg == 1
+    @@encount_f.resume(true) if Input.mousePush?(M_LBUTTON)
     # バトルのすべての戻り値はテキストになっている
     @@str
     # バトルが終わってウィンドウループに戻る処理 今回は街とか戻るところもないのでつけない

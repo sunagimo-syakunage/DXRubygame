@@ -36,7 +36,10 @@ class Game_data
       boss_bear: @boss_bear,
       # enemylist
       # ("#{stage}_enemy_list").to_symみたいにするかな
-      enemy_list: [@spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @boss_bear],
+      forest_enemy_list: [@spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @boss_bear],
+      marine_enemy_list: [@boss_bear],
+      # enemy_lists: [{ name: 'forest', list: @@background_forest },
+      #               { name: 'marine', list: @@background_marine }]
       # ==================プレイヤー==================
       # 主人公を作る
       # プレイヤーはuiをみるからdataで宣言するならdataにuiを読み込ませるとか
@@ -44,7 +47,7 @@ class Game_data
       # ==================キャラクター終わり==================
 
       # ==================ステージ関連==================
-      stagelist: ['forest','marine']
+      stagelist: %w[forest marine]
       # ==================ステージ関連おわり==================
 
     }
