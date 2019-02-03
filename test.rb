@@ -18,28 +18,30 @@
 # include Skill
 
 # skill_damege("nomal","ice")
-hogehoge
+# hogehoge
 
-class Game_data
-  def initialize
-    @@data_book = {
-      win_w: 'w',
-      win_h: 'h',
-      ui: 'ui',
-      spi_fire: '@spi_fire',
-      spi_ice: '@spi_ice',
-      boss_bear: '@boss_bear',
-      enemy_list: ['@spi_fire', '@spi_ice', '@spi_fire', '@spi_ice', '@spi_fire', '@spi_ice', '@spi_fir'],
-      player: '@player'
-    }
-  end
+# class Game_data
+#   def initialize
+#     @@data_book = {
+#       win_w: 'w',
+#       win_h: 'h',
+#       ui: 'ui',
+#       spi_fire: '@spi_fire',
+#       spi_ice: '@spi_ice',
+#       boss_bear: '@boss_bear',
+#       enemy_list: ['@spi_fire', '@spi_ice', '@spi_fire', '@spi_ice', '@spi_fire', '@spi_ice', '@spi_fir'],
+#       player: '@player'
+#     }
+#   end
+#
+#   def self.book
+#     @@data_book
+#     end
+# end
+#
+# Game_data.new
+#
+# puts Game_data.book
+# sleep(5)
 
-  def self.book
-    @@data_book
-    end
-end
-
-Game_data.new
-
-puts Game_data.book
-sleep(5)
+puts 800 % 128 

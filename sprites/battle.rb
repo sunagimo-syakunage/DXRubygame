@@ -117,6 +117,7 @@ class Battle
         end
       end
       # 戦闘が終わったのでリザルトを呼びます
+      @@result_f.resume(true)
       @@result_f.resume(true) while Fiber.yield
     end
   end
@@ -134,11 +135,13 @@ class Battle
                 else
                   ["戦闘に勝利した\n"]
                 end
+                Fiber.yield
         @@result_flg = 'win'
       elsif @@flg == 2
         @@str = ["戦闘に敗北した\n"]
         # 負けたのでプレイヤーを回復させとく
         @@player.hp = @@player_oldhp
+        Fiber.yield
         @@result_flg = 'lose'
       else
         # 勝ったか負けた以外なら逃げている具体的にはflg==0

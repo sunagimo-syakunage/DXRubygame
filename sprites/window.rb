@@ -30,20 +30,30 @@ class Game_window
         Home.run
 
         if Home.select == 'explore'
-          Battle.start
           @str = []
           @scene = 'stage_slect'
         end
-
+        # ここらへん回りくどいのでホームにまとめたほうがいいかもね
+        # ステージ選択も拠点でやってるわけだし
       when 'stage_slect'
         Stage.run
         Texts.text(@str, 3)
-
+        if Stage.select == 'GO'
+          Battle.start
+          @str = []
+          @scene = 'battle'
+        elsif Stage.select == 'cancel'
+          @scene = 'home'
+        end
       when 'battle'
         UI.background('forest')
         @str = Battle.run('式展開とかでどこのステージか入れる今はforest')
         Texts.text(@str, 3)
-        @scene = 'home' if Battle.end == 'lose'
+
+        if Battle.end == 'lose'
+          @str = []
+          @scene = 'home'
+        end
       end
     end
   end
