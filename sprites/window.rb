@@ -38,21 +38,25 @@ class Game_window
       when 'stage_slect'
         Stage.run
         Texts.text(@str, 3)
-        if Stage.select == 'GO'
-          Battle.start
+        @stage_select = Stage.select if Input.mousePush?(M_LBUTTON)
+        if @stage_select
+          Battle.start(@stage_select)
           @str = []
           @scene = 'battle'
         elsif Stage.select == 'cancel'
           @scene = 'home'
         end
       when 'battle'
-        UI.background('forest')
-        @str = Battle.run('式展開とかでどこのステージか入れる今はforest')
+        UI.background(@stage_select)
+        @str = Battle.run
         Texts.text(@str, 3)
 
         if Battle.end == 'lose'
           @str = []
+          @stage_select = false
           @scene = 'home'
+        elsif Battle.end == 'win' || Battle.end == 'escape'
+          Battle.start(@stage_select)
         end
       end
     end

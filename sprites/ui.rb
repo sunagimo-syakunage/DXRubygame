@@ -49,7 +49,7 @@ class UI < Sprite
     @@img_width = @@cancel_img.width
     @@img_height = @@cancel_img.height
     @@img_margin = @@img_width
-    @@button_left_margin = (@@text_field_width % (@@img_width+@@img_margin)) / 2
+    @@button_left_margin = (@@text_field_width % (@@img_width + @@img_margin)) / 2
 
     # マウスオーバー時に出る画像
     @@hover = Image.new(@@img_width * 1.5, @@img_height * 1.5, [255, 255, 255])
@@ -57,7 +57,7 @@ class UI < Sprite
     # テキストフィールドの半分に来るようにする
     # この数値は画像の左上が来る位置を刺してることに注意
     @@buttons_y = @@text_field_y + @@text_field_height / 2 - @@img_width / 2
-    @@cancel_button = [Sprite.new(@@button_left_margin+@@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@cancel_img), Sprite.new(@@button_left_margin+@@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@cancel_img.flush([50, 50, 50]))]
+    @@cancel_button = [Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@cancel_img), Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@cancel_img.flush([50, 50, 50]))]
 
     # ==================バー系==================
     # 1メモリの大きさ
@@ -135,9 +135,9 @@ class Home_UI < UI
     @@shop_img = Image.new(64, 64, [200, 100, 150])
     @@explore_img = Image.new(64, 64, [100, 200, 150])
 
-    @@home_button = [Sprite.new(@@button_left_margin+@@img_margin-@@img_width/2, @@buttons_y, @@home_img), Sprite.new(@@button_left_margin+@@img_margin-@@img_width/2, @@buttons_y, @@home_img.flush([50, 50, 50]))]
-    @@shop_button = [Sprite.new(@@button_left_margin+@@img_margin * 2 + @@img_width*0.5, @@buttons_y, @@shop_img), Sprite.new(@@button_left_margin+@@img_margin * 2 + @@img_width*0.5, @@buttons_y, @@shop_img.flush([50, 50, 50]))]
-    @@explore_button = [Sprite.new(@@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@explore_img), Sprite.new(@@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@explore_img.flush([50, 50, 50]))]
+    @@home_button = [Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@home_img), Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@home_img.flush([50, 50, 50]))]
+    @@shop_button = [Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@shop_img), Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@shop_img.flush([50, 50, 50]))]
+    @@explore_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@explore_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@explore_img.flush([50, 50, 50]))]
 
     @@home_buttons = [@@home_button, @@shop_button, @@explore_button]
     @@home_buttons.each { |bb| bb[0].z = 100 }
@@ -207,15 +207,15 @@ class Battle_UI < UI
 
     # ボタン置き場
     # 色が変わるやつは配列になってるので注意
-    @@attak_button = [Sprite.new(@@button_left_margin+@@img_margin-@@img_width/2, @@buttons_y, @@attak_img), Sprite.new(@@button_left_margin+@@img_margin-@@img_width/2, @@buttons_y, @@attak_img.flush([50, 50, 50]))]
-    @@defence_button = [Sprite.new(@@button_left_margin+@@img_margin * 2 + @@img_width*0.5, @@buttons_y, @@defence_img), Sprite.new(@@button_left_margin+@@img_margin * 2 + @@img_width*0.5, @@buttons_y, @@defence_img.flush([50, 50, 50]))]
-    @@skill_button = [Sprite.new(  @@button_left_margin+@@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img), Sprite.new( @@button_left_margin+@@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
-    @@test_a_button = [Sprite.new(  @@button_left_margin+@@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img), Sprite.new( @@button_left_margin+@@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
-    @@test_b_button = [Sprite.new(  @@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img), Sprite.new( @@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
-    @@escape_button = [Sprite.new(@@button_left_margin+@@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img), Sprite.new(@@button_left_margin+@@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img.flush([50, 50, 50]))]
-    #スキルボタン
-    @@fire_button = Sprite.new(@@button_left_margin+@@img_margin-@@img_width/2, @@buttons_y, @@fire_img)
-    @@ice_button = Sprite.new(@@button_left_margin+@@img_margin * 2 + @@img_width*0.5, @@buttons_y, @@ice_img)
+    @@attak_button = [Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@attak_img), Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@attak_img.flush([50, 50, 50]))]
+    @@defence_button = [Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@defence_img), Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@defence_img.flush([50, 50, 50]))]
+    @@skill_button = [Sprite.new(@@button_left_margin + @@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
+    @@test_a_button = [Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
+    @@test_b_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
+    @@escape_button = [Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img), Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img.flush([50, 50, 50]))]
+    # スキルボタン
+    @@fire_button = Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@fire_img)
+    @@ice_button = Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@ice_img)
     # ボタンのスプライトを配列にまとめとく
     # ボタンを追加したらここに入れないと表示されないよ
     # ちなみに動きはbattle_readでしてるからそっちも編集だ
@@ -334,11 +334,11 @@ class Stage_UI < UI
     @@right_arrow = Image.load('./media/button/right_arrow.png')
     @@white_circle = Image.load('./media/button/circle.png')
     @@black_circle = Image.load('./media/button/circle.png').flush([50, 50, 50])
-    @@GO_button = [Sprite.new(@@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img), Sprite.new(@@button_left_margin+@@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img.flush([50, 50, 50]))]
+    @@GO_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img.flush([50, 50, 50]))]
     @@left_arrow_button = [Sprite.new(@@img_width / 2, (@@win_h - @@img_height) / 2, @@left_arrow), Sprite.new(@@img_width / 2, (@@win_h - @@img_height) / 2, @@left_arrow.flush([50, 50, 50]))]
     @@right_arrow_button = [Sprite.new(@@win_w - @@img_width * 1.5, (@@win_h - @@img_height) / 2, @@right_arrow), Sprite.new(@@win_w - @@img_width * 1.5, (@@win_h - @@img_height) / 2, @@right_arrow.flush([50, 50, 50]))]
     @@arrow_buttons = [@@left_arrow_button, @@right_arrow_button]
-    @@stage_buttons = [@@GO_button,@@cancel_button]
+    @@stage_buttons = [@@GO_button, @@cancel_button]
     @@stage_buttons.each { |bb| bb[0].z = 100 }
     @@arrow_buttons.each { |bb| bb[0].z = 100 }
     @@stage_list = @@data[:stagelist]
@@ -362,7 +362,11 @@ class Stage_UI < UI
     # もちろんそのプレイヤーのメソッドも
     case @@cursor
     when @@GO_button[0]
-      return 'GO'
+      if @@i == 0
+        return 'forest'
+      elsif @@i == 1
+        return 'marine'
+      end
     when @@cancel_button[0]
       return 'cancel'
     else
