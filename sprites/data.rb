@@ -36,8 +36,11 @@ class Game_data
       boss_bear: @boss_bear,
       # enemylist
       # ("#{stage}_enemy_list").to_symみたいにするかな
-      forest_enemy_list: [@spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @boss_bear],
-      marine_enemy_list: [@boss_bear],
+      forest_enemy_list: [{ enemy: @spi_fire, encount: 0..3 },
+                          { enemy: @spi_ice, encount: 4..7 },
+                          { enemy: @boss_bear, encount: 8..9 }],
+      # forest_enemy_list: [@spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @spi_fire, @spi_ice, @boss_bear],
+      marine_enemy_list: [{ enemy: @boss_bear, encount: 0..9 }],
       # enemy_lists: [{ name: 'forest', list: @@background_forest },
       #               { name: 'marine', list: @@background_marine }]
       # ==================プレイヤー==================

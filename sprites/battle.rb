@@ -129,9 +129,12 @@ class Battle
   end
 
   def self.encount
-    # enemy_listからenemyを一体ランダムに選ぶ
+    # ステージに対応したenemy_listの呼び出し
     @@enemy_list = @@data["#{@stage}_enemy_list".to_sym]
-    @@enemy = @@enemy_list.sample
+    # 0~9のランダムな数字
+    rand = rand(10)
+    # そのランダムな数字を自分のエンカウント数列に含んだやつを返す
+    @@enemy = @@enemy_list.select { |abc| abc[:encount] === rand }.first[:enemy]
     # 戦闘が終わったとき用に初期体力の保存
     @@enemy_oldhp = @@enemy.max_hp
     # 負けた時用に体力の保存
