@@ -39,12 +39,13 @@ class Game_window
         Stage.run
         Texts.text(@str, 3)
         @stage_select = Stage.select if Input.mousePush?(M_LBUTTON)
-        if @stage_select
-          Battle.start(@stage_select)
-          @str = []
-          @scene = 'battle'
-        elsif Stage.select == 'cancel'
+        if @stage_select == 'cancel'
+          @stage_select = false
           @scene = 'home'
+        elsif @stage_select
+            Battle.start(@stage_select)
+            @str = []
+            @scene = 'battle'
         end
       when 'battle'
         UI.background(@stage_select)
