@@ -2,9 +2,9 @@ class Game_window
   attr_accessor :flg
 
   def initialize
-    data = Game_data.book
-    Window.width = data[:win_w]
-    Window.height = data[:win_h]
+    @data = Game_data.book
+    Window.width = @data[:win_w]
+    Window.height = @data[:win_h]
 
     # ちょっとナンセンスだけど初期の文字
     @str = ["マウスで操作！\nまだ動作だけなので目標などはありません！"]
@@ -36,19 +36,19 @@ class Game_window
         # ここらへん回りくどいのでホームにまとめたほうがいいかもね
         # ステージ選択も拠点でやってるわけだし
       when 'stage_slect'
-        Stage.run
+        Stage_UI.view
         Texts.text(@str, 3)
-        @stage_select = Stage.select if Input.mousePush?(M_LBUTTON)
+        @stage_select = Stage_UI.stage_read if Input.mousePush?(M_LBUTTON)
         if @stage_select == 'cancel'
           @stage_select = false
           @scene = 'home'
         elsif @stage_select
-            Battle.start(@stage_select)
-            @str = []
-            @scene = 'battle'
+          Battle.start(@stage_select.name)
+          @str = []
+          @scene = 'battle'
         end
       when 'battle'
-        UI.background(@stage_select)
+        UI.background(@stage_select.name)
         @str = Battle.run
         Texts.text(@str, 3)
 
@@ -56,8 +56,11 @@ class Game_window
           @str = []
           @stage_select = false
           @scene = 'home'
-        elsif Battle.end == 'win' || Battle.end == 'escape'
-          Battle.start(@stage_select)
+        elsif Battle.end == 'win'
+          Battle.start(@stage_select.name)
+          @stage_select.stage_exp += 1 if @stage_select.stage_exp < @stage_select.stage_exp_max
+        elsif Battle.end == 'escape'
+          Battle.start(@stage_select.name)
         end
       end
     end

@@ -30,12 +30,15 @@ class Player < Character
     str.join
   end
 
-  def escape(_enemy)
+  def escape(enemy)
     str = []
     str << "#{name}は逃げ出した\n"
     # 7割で逃げれる
-    if (0..6) === rand(10)
-      Battle.escape
+    # ボスならば とりあえずやっつけ
+    if enemy.name == 'トレント'
+      str << "しかし回り込まれてしまった！\n"
+    elsif (0..6) === rand(10)
+      Battle.escape if enemy.name != 'Trent'
     else
       str << "しかし回り込まれてしまった！\n"
     end

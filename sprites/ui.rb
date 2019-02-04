@@ -15,20 +15,25 @@ class UI < Sprite
     @@spi_fire_img = Image.load('./media/character/spi_fire.png')
     @@spi_ice_img = Image.load('./media/character/spi_ice.png')
     @@boss_bear_img = Image.load('./media/character/boss_bear.png')
+    @@boss_trent_img = Image.load('./media/character/boss_trent.png')
     # linebotで教わった配列の中にハッシュをかく方法で名前で検索できる
     @@enemy_imgs = [{ name: 'ファイアスピリット', img: @@spi_fire_img },
                     { name: 'アイススピリット', img: @@spi_ice_img },
-                    { name: '熊', img: @@boss_bear_img }]
+                    { name: '熊', img: @@boss_bear_img },
+                    { name: 'トレント', img: @@boss_trent_img }]
 
     # ==================ステージ系==================
     @@background_home = Image.load('./media/background/home.png')
     @@background_forest = Image.load('./media/background/forest.png')
+    @@background_forest_boss = Image.load('./media/background/forest_boss.png')
     @@background_marine = Image.load('./media/background/marine.png')
     @@background_imgs = [{ name: 'home', img: @@background_home },
                          { name: 'forest', img: @@background_forest },
+                         { name: 'forest_boss', img: @@background_forest_boss },
                          { name: 'marine', img: @@background_marine }]
     # ==================テキスト系==================
     @@font_size = 32
+    @@h1font_size = 128
     # テキストを置く場所作り
     @@text_field_width = @@win_w
     @@text_field_height = @@font_size * 5
@@ -42,6 +47,7 @@ class UI < Sprite
     # 今更だけどフォント
     # ドットものにする予定
     @@font = Font.new(@@font_size, font_name = 'MS Pゴシック')
+    @@h1font = Font.new(@@h1font_size, font_name = 'MS Pゴシック')
 
     # ==================ボタン系==================
     # イメージの大きさをhome基準にするてもある
@@ -316,7 +322,7 @@ class Battle_UI < UI
     # エネミーが生きているなら エネミーイメージに エネミーイメージスのエネミーの名前に一致したものの画像を入れる
     # セレクトは配列にして返してくるみたいなのでファーストとか忘れずにfindつかってもいいかもね
     if enemy.alive_flg && @@enemy_img = @@enemy_imgs.select { |abc| abc[:name] == enemy.name }.first[:img]
-      Window.draw(@@win_w * 5 / 7, @@win_h * 5 / 7 - @@enemy_img.height, @@enemy_img, 50)
+      Window.draw(@@win_w * 5 / 7 - @@enemy_img.width / 5, @@win_h * 5 / 7 - @@enemy_img.height, @@enemy_img, 50)
     end
     player_view
     exp_bar if @@player.alive_flg
@@ -329,11 +335,13 @@ end
 
 class Stage_UI < UI
   def initialize
+    @@boss_battle_img = Image.new(128, 128, [255, 100, 100])
     @@GO_img = Image.load('./media/button/GO.png')
     @@left_arrow = Image.load('./media/button/left_arrow.png')
     @@right_arrow = Image.load('./media/button/right_arrow.png')
     @@white_circle = Image.load('./media/button/circle.png')
     @@black_circle = Image.load('./media/button/circle.png').flush([50, 50, 50])
+    @@boss_battle_button = [Sprite.new(@@win_w - @@text_x - 128, @@h1font_size / 4, @@boss_battle_img), Sprite.new(@@win_w - @@text_x - 128, @@h1font_size / 4, @@boss_battle_img.flush([50, 50, 50]))]
     @@GO_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@GO_img.flush([50, 50, 50]))]
     @@left_arrow_button = [Sprite.new(@@img_width / 2, (@@win_h - @@img_height) / 2, @@left_arrow), Sprite.new(@@img_width / 2, (@@win_h - @@img_height) / 2, @@left_arrow.flush([50, 50, 50]))]
     @@right_arrow_button = [Sprite.new(@@win_w - @@img_width * 1.5, (@@win_h - @@img_height) / 2, @@right_arrow), Sprite.new(@@win_w - @@img_width * 1.5, (@@win_h - @@img_height) / 2, @@right_arrow.flush([50, 50, 50]))]
@@ -341,11 +349,20 @@ class Stage_UI < UI
     @@stage_buttons = [@@GO_button, @@cancel_button]
     @@stage_buttons.each { |bb| bb[0].z = 100 }
     @@arrow_buttons.each { |bb| bb[0].z = 100 }
+    @@boss_battle_button[0].z = 100
     @@stage_list = @@data[:stagelist]
+    @@stage_exp_flg = 0
     @@i = 0
+    @@stage_block_width = 3
+    @@stage_block_height = 32
+    @@stage_exp_block = Image.new(@@stage_block_width, @@stage_block_height, [50, 200, 200])
+    @@stage_bar_background_width = @@stage_block_width * 100 + @@bar_border * 2
+    @@stage_bar_background_height = @@stage_block_height + @@bar_border * 2
+    @@stage_exp_bar_background = Image.new(@@stage_bar_background_width, @@stage_bar_background_height, [0, 0, 0])
   end
 
   def self.stage_menu
+    Sprite.draw(@@boss_battle_button) if @@stage_exp_flg == 1
     Sprite.draw(@@stage_buttons)
     if i = @@cursor.check(@@stage_buttons)[1]
       i.z = 101
@@ -362,13 +379,11 @@ class Stage_UI < UI
     # もちろんそのプレイヤーのメソッドも
     case @@cursor
     when @@GO_button[0]
-      if @@i == 0
-        return 'forest'
-      elsif @@i == 1
-        return 'marine'
-      end
+      return @@stage_list[@@i]
     when @@cancel_button[0]
       return 'cancel'
+    when @@boss_battle_button[0]
+      return @@stage_list[@@i + 1] if @@stage_exp_flg == 1
     else
       return false
     end
@@ -397,16 +412,32 @@ class Stage_UI < UI
         Sprite.draw(i)
         i.z = 0
       end
+    end
   end
+
+  def self.stage_explore_bar
+    # まだ経験地表がないので今はいらないパーセント計算
+    # player_exp_p = (player.exp* 100.0 / 100).round
+    # hpのほうとほぼ同じ
+    stage_exp_p = (@@stage_list[@@i].stage_exp * 100.0 / @@stage_list[@@i].stage_exp_max).round
+    (0...stage_exp_p).each do |i|
+      Window.draw(@@text_x * 1.5 + i * @@stage_block_width, @@h1font_size, @@stage_exp_block, 50)
+    end
+    Window.draw(@@text_x * 1.5 - 2, @@h1font_size - 2, @@stage_exp_bar_background, 20)
   end
 
   def self.view
     @@cursor.x = Input.mouse_pos_x
     @@cursor.y = Input.mouse_pos_y
+    @@stage_exp_flg = @@stage_list[@@i].stage_exp == @@stage_list[@@i].stage_exp_max ? 1 : 0
     stage_arrow
     stage_menu
-    background(@@stage_list[@@i])
-    @@i += 1 if @@i < @@stage_list.size - 1 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@right_arrow_button)
-    @@i -= 1 if @@i >= 1 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@left_arrow_button)
+    stage_explore_bar if @@stage_exp_flg == 0
+    background(@@stage_list[@@i].name)
+    Window.draw_font(@@text_x, 0, @@stage_list[@@i].name, @@h1font, z: 1)
+    # Window.draw_font(@@text_x, 128, @@stage_list[@@i].stage_exp.to_s, @@font, z: 1)
+    # 今はやっつけで通常ステージとボスステージが交互になることによってボス戦を再現しています。
+    @@i += 2 if @@i < @@stage_list.size - 2 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@right_arrow_button)
+    @@i -= 2 if @@i >= 2 && (Input.mousePush?(M_LBUTTON) && @@cursor === @@left_arrow_button)
   end
 end

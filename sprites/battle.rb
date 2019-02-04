@@ -59,9 +59,9 @@ class Battle
             # プレイヤーの選択に応じたメソッドを呼び出す
             @@str = [@@player.send(@@select, @@enemy)]
             # 逃げれたなら戦闘終了
+            Fiber.yield
             break if @@escape_flg == 1
 
-            Fiber.yield
             # 選択されたのが実行されたので戻しとく
             @@select = false
             # 敵のターンへ
@@ -160,6 +160,7 @@ class Battle
     puts @stage
     @@str = []
     @@result_flg = 'run'
+    @@encount_f.resume(true)
   end
 
   def self.end

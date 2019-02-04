@@ -44,4 +44,8 @@
 # puts Game_data.book
 # sleep(5)
 
-puts 800 % 128 
+# puts 800 % 128
+
+a = false ? '1' : '2'
+
+puts a
