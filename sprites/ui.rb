@@ -221,7 +221,8 @@ class Battle_UI < UI
     # ちなみに動きはbattle_readでしてるからそっちも編集だ
     # enemy_imgsみたいにまとめたいけどSprite.drawで認識されなくなるからできない.vales関連で頑張ればできるかも
     # でも今のところは普通の配列で不自由ない
-    @@battle_buttons = [@@attak_button, @@defence_button, @@skill_button, @@test_a_button, @@test_b_button, @@escape_button]
+    @@battle_buttons = [@@attak_button, @@defence_button, @@skill_button, @@escape_button]
+    # @@battle_buttons = [@@attak_button, @@defence_button, @@skill_button, @@test_a_button, @@test_b_button, @@escape_button]
     # スキルボタン押した？flg
     @@skill_flg = 0
     # スキルボタンまとめ

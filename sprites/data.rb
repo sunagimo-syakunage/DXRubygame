@@ -35,7 +35,7 @@ class Game_data
       spi_ice: @spi_ice,
       boss_bear: @boss_bear,
       # enemylist
-      # ("#{stage}_enemy_list").to_symみたいにするかな
+      # ("#{stage}_enemy_list").to_symで呼び出している
       forest_enemy_list: [{ enemy: @spi_fire, encount: 0..3 },
                           { enemy: @spi_ice, encount: 4..7 },
                           { enemy: @boss_bear, encount: 8..9 }],
