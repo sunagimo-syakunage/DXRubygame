@@ -137,9 +137,9 @@ end
 class Home_UI < UI
   def initialize
     # ==================拠点ボタン系==================
-    @@home_img = Image.new(64, 64, [200, 150, 100])
-    @@shop_img = Image.new(64, 64, [200, 100, 150])
-    @@explore_img = Image.new(64, 64, [100, 200, 150])
+    @@home_img = Image.load('./media/button/dummy.png')
+    @@shop_img = Image.load('./media/button/dummy.png')
+    @@explore_img = Image.load('./media/button/GO.png')
 
     @@home_button = [Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@home_img), Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@home_img.flush([50, 50, 50]))]
     @@shop_button = [Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@shop_img), Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@shop_img.flush([50, 50, 50]))]
@@ -210,14 +210,15 @@ class Battle_UI < UI
     @@fire_img = Image.load('./media/button/fire.png')
     @@ice_img = Image.load('./media/button/ice.png')
     @@escape_img = Image.load('./media/button/escape.png')
+    @@dummy_img = Image.load('./media/button/dummy.png')
 
     # ボタン置き場
     # 色が変わるやつは配列になってるので注意
     @@attak_button = [Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@attak_img), Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@attak_img.flush([50, 50, 50]))]
     @@defence_button = [Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@defence_img), Sprite.new(@@button_left_margin + @@img_margin * 2 + @@img_width * 0.5, @@buttons_y, @@defence_img.flush([50, 50, 50]))]
     @@skill_button = [Sprite.new(@@button_left_margin + @@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 3 + @@img_width * 1.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
-    @@test_a_button = [Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
-    @@test_b_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@skill_img.flush([50, 50, 50]))]
+    @@test_a_button = [Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@dummy_img), Sprite.new(@@button_left_margin + @@img_margin * 4 + @@img_width * 2.5, @@buttons_y, @@dummy_img.flush([50, 50, 50]))]
+    @@test_b_button = [Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@dummy_img), Sprite.new(@@button_left_margin + @@img_margin * 5 + @@img_width * 3.5, @@buttons_y, @@dummy_img.flush([50, 50, 50]))]
     @@escape_button = [Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img), Sprite.new(@@button_left_margin + @@img_margin * 6 + @@img_width * 4.5, @@buttons_y, @@escape_img.flush([50, 50, 50]))]
     # スキルボタン
     @@fire_button = Sprite.new(@@button_left_margin + @@img_margin - @@img_width / 2, @@buttons_y, @@fire_img)
@@ -335,7 +336,7 @@ end
 
 class Stage_UI < UI
   def initialize
-    @@boss_battle_img = Image.new(128, 128, [255, 100, 100])
+    @@boss_battle_img = Image.load('./media/button/BOSS.png')
     @@GO_img = Image.load('./media/button/GO.png')
     @@left_arrow = Image.load('./media/button/left_arrow.png')
     @@right_arrow = Image.load('./media/button/right_arrow.png')

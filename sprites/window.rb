@@ -7,7 +7,7 @@ class Game_window
     Window.height = @data[:win_h]
 
     # ちょっとナンセンスだけど初期の文字
-    @str = ["マウスで操作！\nまだ動作だけなので目標などはありません！"]
+    @str = ["マウスで操作！\nまだ動作だけなので目標などはありません！\n大きなバッテンはダミーボタンなので動きません"]
     # @battle = Battle.new(@ui, enemy_list, player)
     @flg = 0
     @scene = 'title'
